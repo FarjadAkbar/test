@@ -4,6 +4,7 @@
 
 # Next.js
 /todo-client/node_modules
+/todo-client/.next
 
 # General
 .DS_Store

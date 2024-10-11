@@ -29,7 +29,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Todo } from "@/types/todo";
+import { TodoTableProps } from "@/types/todo";
 import TodoForm from "./todo-form";
 import { TodoPriority, TodoStatus } from "@/constants";
 import {
@@ -43,11 +43,7 @@ import {
 } from "@/components/ui/pagination"
 import TodoContext from "@/context/TodoContext";
 
-interface TodoTableProps {
-  todos: Todo[];
-  handleEditTodo: (editedTodo: Todo) => void;
-  handleDeleteTodo: (id: number) => void;
-}
+
 
 export function TodoTable({
   todos,
@@ -182,33 +178,36 @@ export function TodoTable({
         </TableBody>
       </Table>
 
-      <Pagination>
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              onClick={() => paginate(state.currentPage - 1)}
-              // disabled={state.currentPage === 1}
-            />
-          </PaginationItem>
-          {[...Array(state.totalPages)].map((_, i) => (
-            <PaginationItem key={i}>
-              <PaginationLink 
-                onClick={() => paginate(i + 1)}
-                isActive={state.currentPage === i + 1}
-              >
-                {i + 1}
-              </PaginationLink>
-            </PaginationItem>
-          ))}
-          <PaginationItem>
-            <PaginationNext
-              onClick={() => paginate(state.currentPage + 1)}
-              // disabled={state.currentPage === state.totalPages}
-            />
-          </PaginationItem>
-        </PaginationContent>
+      {state.currentPage > 1 && state.currentPage < state.totalPages && (
+        <Pagination>
+          <PaginationContent>
+            {
+              state.currentPage > 1 && (
+                <PaginationItem>
+                  <PaginationPrevious onClick={() => paginate(state.currentPage - 1)} />
+                </PaginationItem>
+              )
+            }
+            {[...Array(state.totalPages)].map((_, i) => (
+              <PaginationItem key={i}>
+                <PaginationLink
+                  onClick={() => paginate(i + 1)}
+                  isActive={state.currentPage === i + 1}
+                >
+                  {i + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+            {
+              state.currentPage < state.totalPages - 1 && (
+                <PaginationItem>
+                  <PaginationNext onClick={() => paginate(state.currentPage + 1)} />
+                </PaginationItem>
+              )
+            }
+          </PaginationContent>
         </Pagination>
-
+      )}
     </div>
   );
 }

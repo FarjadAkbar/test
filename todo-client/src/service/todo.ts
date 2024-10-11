@@ -4,7 +4,7 @@ const API_URL = `${process.env.NEXT_PUBLIC_API}/api/todos`;
 
 // Fetch all todos
 export const getTodosQuery = async (page: number = 1) => {
-    const response = await fetch(`${API_URL}/api/todos?page=${page}`);
+    const response = await fetch(`${API_URL}?page=${page}`);
     const data = await response.json();
     return data; // Ensure this returns both `todos` and pagination metadata
 };

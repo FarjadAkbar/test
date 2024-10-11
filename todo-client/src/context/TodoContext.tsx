@@ -6,7 +6,7 @@ import { createTodoMutate, deleteTodoMutate, getTodosQuery, updateTodoMutate } f
 // Initialize the default state
 const initialState: TodoState = {
   todos: [],
-  currentPage: 2,   // Default to page 1
+  currentPage: 1,   // Default to page 1
   totalPages: 0,
 };
 
@@ -14,7 +14,7 @@ const initialState: TodoState = {
 const todoReducer = (state: TodoState, action: TodoAction): TodoState => {
   switch (action.type) {
     case 'SET_TODOS':
-      return { ...state, todos: action.payload };
+      return { ...state, todos: action.payload, totalPages: action.totalPages, currentPage: action.currentPage };
     case 'ADD_TODO':
       return { ...state, todos: [...state.todos, action.payload] };
     case 'UPDATE_TODO':
@@ -47,7 +47,8 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
   useEffect(() => {
     const fetchTodos = async () => {
       const data = await getTodosQuery();
-      dispatch({ type: 'SET_TODOS', payload: data });
+      console.log(data, "/.////")
+      dispatch({ type: 'SET_TODOS', payload: data.data, totalPages: data.meta.total, currentPage: data.meta.current_page });
     };
     
     fetchTodos();
@@ -74,7 +75,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
   const paginate = async (page: number) => {
     dispatch({ type: 'SET_CURRENT_PAGE', payload: page });
     const data = await getTodosQuery(page); // Fetch new page data
-    dispatch({ type: 'SET_TODOS', payload: data });
+    dispatch({ type: 'SET_TODOS', payload: data.data, totalPages: data.meta.total, currentPage: data.meta.current_page });
   };
 
   return (

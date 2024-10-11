@@ -1,3 +1,4 @@
+"use client"
 import TodoForm from "@/components/todo-form";
 import Image from "next/image";
 import { useContext, useTransition } from "react";
@@ -17,6 +18,7 @@ export default function Home() {
 
   const { state, addTodo, updateTodo, deleteTodo } = context;
   const [isPending, startTransition] = useTransition(); 
+
 
   const handleAsyncAction = async (action: () => Promise<void>, successMessage: string, errorMessage: string) => {
     startTransition(async () => {

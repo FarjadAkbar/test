@@ -21,7 +21,7 @@ export interface TodoState {
 
 // Define the types of actions that can be dispatched
 export type TodoAction =
-  | { type: 'SET_TODOS'; payload: Todo[] }
+  | { type: 'SET_TODOS'; payload: Todo[], totalPages: number, currentPage: number }
   | { type: 'ADD_TODO'; payload: Todo }
   | { type: 'UPDATE_TODO'; payload: Todo }
   | { type: 'DELETE_TODO'; payload: number }
@@ -38,4 +38,10 @@ export interface TodoContextType {
 
 export interface TodoProviderProps {
   children: ReactNode;
+}
+
+export interface TodoTableProps {
+  todos: Todo[];
+  handleEditTodo: (editedTodo: Todo) => void;
+  handleDeleteTodo: (id: number) => void;
 }
