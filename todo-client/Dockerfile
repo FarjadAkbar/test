@@ -10,13 +10,13 @@ RUN npm config set fetch-retry-maxtimeout 120000
 
 # Copy package.json and install dependencies
 COPY package.json ./
-RUN npm install
+RUN npm install -g yarn && yarn install
 
 # Copy the rest of the files
 COPY . .
 
 # Start the Next.js development server
-CMD ["npm", "run", "dev"]
+CMD ["yarn", "dev"]
 
 # Expose port 3000
 EXPOSE 3000
