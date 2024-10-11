@@ -3,14 +3,9 @@ FROM node:21-alpine
 # Set working directory
 WORKDIR /app
 
-# Set npm config options
-RUN npm config set fetch-retries 5
-RUN npm config set fetch-retry-mintimeout 20000
-RUN npm config set fetch-retry-maxtimeout 120000
-
-# Copy package.json and install dependencies
+# Copy and install dependencies
 COPY package.json ./
-RUN npm install
+# RUN npm install
 
 # Copy the rest of the files
 COPY . .
