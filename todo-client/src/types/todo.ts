@@ -1,5 +1,5 @@
 import { TodoPriority, TodoStatus } from "@/constants";
-import { Dispatch, ReactNode } from "react";
+import { ReactNode } from "react";
 
 // Define the structure of a Todo item
 export interface Todo {
@@ -44,4 +44,5 @@ export interface TodoTableProps {
   todos: Todo[];
   handleEditTodo: (editedTodo: Todo) => void;
   handleDeleteTodo: (id: number) => void;
+  isLoading: boolean;
 }

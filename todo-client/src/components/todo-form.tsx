@@ -19,7 +19,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -45,7 +44,8 @@ const todoFormSchema = z.object({
   title: z
     .string()
     .min(1, "Title is required")
-    .max(100, "Title must be 100 characters or less"),
+    .max(100, "Title must be 100 characters or less")
+    .regex(/^\S+$/, "Title cannot contain spaces"), 
   description: z
     .string()
     .max(500, "Description must be 500 characters or less"),
@@ -63,12 +63,14 @@ interface TodoFormProps {
   mode: "add" | "edit";
   initialData?: Omit<TodoFormValues, "due_date"> & { due_date: Date | string };
   onSubmit: (data: TodoFormValues) => void;
+  isLoading?: boolean;
 }
 
 export default function TodoForm({
   mode,
   initialData,
   onSubmit,
+  isLoading = false,
 }: TodoFormProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -94,7 +96,7 @@ export default function TodoForm({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant={mode === "add" ? "default" : "outline"} size="icon">
+        <Button variant={mode === "add" ? "default" : "outline"} size="icon" disabled={isLoading}>
           {mode === "add" ? (
             <CirclePlus className="h-4 w-4" />
           ) : (
@@ -109,7 +111,7 @@ export default function TodoForm({
             {mode === "add"
               ? "Add a new todo item here."
               : "Make changes to your todo item here."}{" "}
-            Click save when you're done.
+            Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>

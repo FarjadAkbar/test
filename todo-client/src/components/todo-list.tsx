@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useContext } from "react";
 import { format } from "date-fns";
-import { Search, Filter, Trash2 } from "lucide-react";
+import { Filter, Trash2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -35,7 +35,6 @@ import { TodoPriority, TodoStatus } from "@/constants";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -45,10 +44,12 @@ import TodoContext from "@/context/TodoContext";
 
 
 
+
 export function TodoTable({
   todos,
   handleEditTodo,
   handleDeleteTodo,
+  isLoading
 }: TodoTableProps) {
   const context = useContext(TodoContext);
   if (!context) {
@@ -144,10 +145,11 @@ export function TodoTable({
                     onSubmit={(editedTodo) =>
                       handleEditTodo({ id: todo.id, ...editedTodo })
                     }
+                    isLoading={isLoading}
                   />
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button variant="destructive" size="icon">
+                      <Button variant="destructive" size="icon" disabled={isLoading}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </AlertDialogTrigger>
@@ -165,6 +167,7 @@ export function TodoTable({
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={() => handleDeleteTodo(todo.id)}
+                          disabled={isLoading}
                         >
                           Delete
                         </AlertDialogAction>
@@ -178,7 +181,8 @@ export function TodoTable({
         </TableBody>
       </Table>
 
-      {state.currentPage > 1 && state.currentPage < state.totalPages && (
+
+      {state.currentPage > 0 && (
         <Pagination>
           <PaginationContent>
             {
@@ -199,7 +203,7 @@ export function TodoTable({
               </PaginationItem>
             ))}
             {
-              state.currentPage < state.totalPages - 1 && (
+              state.currentPage < state.totalPages && (
                 <PaginationItem>
                   <PaginationNext onClick={() => paginate(state.currentPage + 1)} />
                 </PaginationItem>

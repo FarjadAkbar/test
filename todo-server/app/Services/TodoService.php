@@ -7,7 +7,7 @@ class TodoService
 {
     public function getAllTodos()
     {
-        return Todo::paginate(10);
+        return Todo::orderBy('id', 'desc')->paginate(5);
     }
 
     public function createTodo(array $data)

@@ -47,8 +47,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
   useEffect(() => {
     const fetchTodos = async () => {
       const data = await getTodosQuery();
-      console.log(data, "/.////")
-      dispatch({ type: 'SET_TODOS', payload: data.data, totalPages: data.meta.total, currentPage: data.meta.current_page });
+      dispatch({ type: 'SET_TODOS', payload: data.data, totalPages: data.meta.last_page, currentPage: data.meta.current_page });
     };
     
     fetchTodos();
@@ -75,7 +74,7 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
   const paginate = async (page: number) => {
     dispatch({ type: 'SET_CURRENT_PAGE', payload: page });
     const data = await getTodosQuery(page); // Fetch new page data
-    dispatch({ type: 'SET_TODOS', payload: data.data, totalPages: data.meta.total, currentPage: data.meta.current_page });
+    dispatch({ type: 'SET_TODOS', payload: data.data, totalPages: data.meta.last_page, currentPage: data.meta.current_page });
   };
 
   return (

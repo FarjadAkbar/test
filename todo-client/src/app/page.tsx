@@ -26,6 +26,7 @@ export default function Home() {
         await action();
         toast({ title: "Success", description: successMessage });
       } catch (error) {
+        console.log(error)
         toast({ title: "Error", description: errorMessage });
       }
     });
@@ -60,12 +61,11 @@ export default function Home() {
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
       <h1 className="text-2xl font-bold mb-4">Todo List</h1>
-      <TodoForm mode="add" onSubmit={handleAddTodo} />
-      {
-        isPending && <p className="text-gray-500">Loading...</p>
-      }
+      <TodoForm mode="add" onSubmit={handleAddTodo} isLoading={isPending} />
+      
       <TodoTable
         todos={state.todos}
+        isLoading={isPending}
         handleEditTodo={handleEditTodo}
         handleDeleteTodo={handleDeleteTodo}
       />
