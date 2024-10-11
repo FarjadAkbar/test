@@ -1,7 +1,6 @@
 services:
   laravel:
     build: ./todo-server
-    dockerfile: Dockerfile
     ports:
       - "8001:8001" 
     volumes:
@@ -11,7 +10,6 @@ services:
 
   nextjs:
     build: ./todo-client
-    dockerfile: Dockerfile
     ports:
       - "3001:3000"  # Host 3001 -> Container 3000
     volumes:
