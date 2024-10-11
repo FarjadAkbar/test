@@ -1,0 +1,11 @@
+# Laravel
+/todo-server/vendor
+/todo-server/node_modules
+
+# Next.js
+/todo-client/node_modules
+
+# General
+.DS_Store
+.env
+docker-compose.override.yml

@@ -1,0 +1,45 @@
+services:
+  laravel:
+    build: ./todo-server
+    ports:
+      - "8001:8001"  # Host 8001 -> Container 8001
+    volumes:
+      - ./todo-server:/var/www
+    depends_on:
+      - db
+
+  nextjs:
+    build: ./todo-client
+    ports:
+      - "3001:3000"  # Host 3001 -> Container 3000
+    volumes:
+      - ./todo-client:/app
+
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: todo_app
+    ports:
+      - "3307:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root
+
+  composer:
+    image: composer:latest
+    container_name: composer
+    volumes:
+      - ./todo-server:/var/www
+    working_dir: /var/www
+    entrypoint: ["composer"]
+
+volumes:
+  db_data:
