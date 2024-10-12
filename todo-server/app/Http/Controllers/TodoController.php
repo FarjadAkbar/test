@@ -16,10 +16,17 @@ class TodoController extends Controller
         $this->todoService = $todoService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return TodoResource::collection($this->todoService->getAllTodos());
+        $search = $request->query('search');
+        $status = $request->query('status');
+        $priority = $request->query('priority');
+
+        $todos = $this->todoService->getAllTodos($search, $status, $priority);
+
+        return TodoResource::collection($todos);
     }
+
 
     public function store(Request $request)
     {

@@ -8,6 +8,7 @@ const initialState: TodoState = {
   todos: [],
   currentPage: 1,   // Default to page 1
   totalPages: 0,
+  loading: false,
 };
 
 // Create the reducer function with strong typing
@@ -31,6 +32,8 @@ const todoReducer = (state: TodoState, action: TodoAction): TodoState => {
       };
     case 'SET_CURRENT_PAGE':
       return { ...state, currentPage: action.payload };
+    case 'SET_LOADING':
+      return { ...state, loading: action.payload };
     default:
       return state;
   }
@@ -43,20 +46,33 @@ const TodoContext = createContext<TodoContextType | undefined>(undefined);
 export const TodoProvider = ({ children }: TodoProviderProps) => {
   const [state, dispatch] = useReducer(todoReducer, initialState);
 
-  // Fetch todos from API on component mount
-  useEffect(() => {
-    const fetchTodos = async () => {
-      const data = await getTodosQuery();
-      dispatch({ type: 'SET_TODOS', payload: data.data, totalPages: data.meta.last_page, currentPage: data.meta.current_page });
-    };
+  // // Fetch todos from API on component mount
+  // useEffect(() => {
+  //   const fetchTodos = async () => {
+  //     const data = await getTodosQuery();
+  //     dispatch({ type: 'SET_TODOS', payload: data.data, totalPages: data.meta.last_page, currentPage: data.meta.current_page });
+  //   };
     
-    fetchTodos();
-  }, []);
+  //   fetchTodos();
+  // }, []);
+
+  const paginate = async (page: number, search?: string, status?: string, priority?: string) => {
+    dispatch({ type: 'SET_LOADING', payload: true });
+
+    try {
+      dispatch({ type: 'SET_CURRENT_PAGE', payload: page });
+      const data = await getTodosQuery(page, search, status, priority);
+      dispatch({ type: 'SET_TODOS', payload: data.data, totalPages: data.meta.last_page, currentPage: data.meta.current_page });
+    } finally {
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
+  };
 
   // Function to add a new todo
   const addTodo = async (newTodo: Omit<Todo, 'id'>) => {
     const addedTodo = await createTodoMutate(newTodo);
     dispatch({ type: 'ADD_TODO', payload: addedTodo });
+    paginate(state.currentPage);
   };
 
   // Function to update a todo
@@ -71,11 +87,6 @@ export const TodoProvider = ({ children }: TodoProviderProps) => {
     dispatch({ type: 'DELETE_TODO', payload: id });
   };
 
-  const paginate = async (page: number) => {
-    dispatch({ type: 'SET_CURRENT_PAGE', payload: page });
-    const data = await getTodosQuery(page); // Fetch new page data
-    dispatch({ type: 'SET_TODOS', payload: data.data, totalPages: data.meta.last_page, currentPage: data.meta.current_page });
-  };
 
   return (
     <TodoContext.Provider value={{ state, addTodo, updateTodo, deleteTodo, paginate }}>
