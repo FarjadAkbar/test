@@ -17,6 +17,7 @@ export interface TodoState {
   todos: Todo[];
   currentPage: number;
   totalPages: number;
+  loading: boolean;
 }
 
 // Define the types of actions that can be dispatched
@@ -25,6 +26,7 @@ export type TodoAction =
   | { type: 'ADD_TODO'; payload: Todo }
   | { type: 'UPDATE_TODO'; payload: Todo }
   | { type: 'DELETE_TODO'; payload: number }
+  | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_CURRENT_PAGE'; payload: number };
 
 // Define the shape of the context
@@ -33,7 +35,7 @@ export interface TodoContextType {
   addTodo: (newTodo: Omit<Todo, 'id'>) => Promise<void>;
   updateTodo: (updatedTodo: Todo) => Promise<void>;
   deleteTodo: (id: number) => Promise<void>;
-  paginate: (page: number) => Promise<void>;
+  paginate: (page: number, search?: string, status?: string, priority?: string) => Promise<void>;
 }
 
 export interface TodoProviderProps {
@@ -41,8 +43,14 @@ export interface TodoProviderProps {
 }
 
 export interface TodoTableProps {
-  todos: Todo[];
   handleEditTodo: (editedTodo: Todo) => void;
   handleDeleteTodo: (id: number) => void;
   isLoading: boolean;
+}
+
+
+export interface FilterState {
+  searchTerm: string;
+  statusFilter: string;
+  priorityFilter: string;
 }
