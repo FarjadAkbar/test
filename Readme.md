@@ -14,6 +14,19 @@ The app provides basic CRUD functionality for managing todos and covers all fund
 
 To build and run the application, follow these steps:
 
-### 1. Build the Next.js client
+### 1. Add api url in NEXT_PUBLIC_API
 ```bash
-docker-compose build --no-cache nextjs
+http://localhost:8001
+
+### 2. Build Docker Image
+```bash
+docker-compose build --no-cache
+
+
+### 3. Start Docker Container
+```bash
+docker-compose up -d
+
+### 4. Start Using
+```bash
+http://localhost:3001
