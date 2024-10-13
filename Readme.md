@@ -1,6 +1,6 @@
 # Basic Todo App
 
-This is a basic Todo application built with **Next.js** for the client and **Laravel** for the server API. It uses service injection and resources in Laravel to handle the backend logic.
+This is a basic Todo application built with **Next.js** for the client and **Laravel** for the server API. It uses service injection and resources in Laravel to handle the backend logic and write test cases.
 
 The app provides basic CRUD functionality for managing todos and covers all fundamental use cases, making it a great starter project for building Todo applications.
 

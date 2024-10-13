@@ -1,21 +1,21 @@
-FROM node:21-alpine
+# Use the official Bun image for faster builds and development
+FROM oven/bun:latest
 
 # Set working directory
 WORKDIR /app
 
-# Copy and install dependencies
-COPY package.json ./
-# RUN npm install
-# RUN npm run build
+# Copy package.json and install dependencies using Bun
+COPY package.json bun.lockb ./
 
-# Copy the rest of the files
+# Install dependencies
+RUN bun install
+RUN bun run build
+
+# Copy the rest of the application files
 COPY . .
-
-# Start the Next.js development server
-# CMD ["npm", "run", "dev"]
-
-CMD ["npm", "start"]
-
 
 # Expose port 3000
 EXPOSE 3000
+
+# Start the Next.js development server using Bun
+CMD ["bun", "run", "start"]
